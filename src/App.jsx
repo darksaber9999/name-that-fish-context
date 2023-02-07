@@ -3,25 +3,17 @@ import "./App.css";
 import { FinalScore } from "./Components/FinalScore";
 import { GameBoard } from "./Components/GameBoard";
 import { ScoreBoard } from "./Components/ScoreBoard";
-import { AppProvider, useAppContext } from "./App.context";
+import { useAppContext } from "./App.context";
 import "./Components/styles/final-score.css";
 
-const GameDisplay = () => {
-  const { isGameOver } = useAppContext();
-  if (!isGameOver) return <GameBoard />;
-  if (isGameOver) return <FinalScore />;
-};
-
 function App() {
+  const { isGameOver } = useAppContext();
   return (
-    <AppProvider>
-      <div className="App">
-        <header>
-          <ScoreBoard />
-          <GameDisplay />
-        </header>
-      </div>
-    </AppProvider>
+    <div className="App">
+      <ScoreBoard />
+      {!isGameOver && <GameBoard />}
+      {isGameOver && <FinalScore />}
+    </div>
   );
 }
 

@@ -2,53 +2,46 @@
 import React, { useState, useContext, createContext } from "react";
 import { Images } from "./assets/images";
 
+const initialFishes = [
+  {
+    name: "trout",
+    url: Images.trout,
+  },
+  {
+    name: "salmon",
+    url: Images.salmon,
+  },
+  {
+    name: "tuna",
+    url: Images.tuna,
+  },
+  {
+    name: "shark",
+    url: Images.shark,
+  },
+];
+const totalCount = initialFishes.length;
 const AppContext = createContext({});
 
 export const AppProvider = ({ children }) => {
-  const initialFishes = [
-    {
-      name: "trout",
-      url: Images.trout,
-    },
-    {
-      name: "salmon",
-      url: Images.salmon,
-    },
-    {
-      name: "tuna",
-      url: Images.tuna,
-    },
-    {
-      name: "shark",
-      url: Images.shark,
-    },
-  ];
-
   const [answersLeft, setAnswersLeft] = useState(initialFishes);
   const [incorrectCount, setIncorrectCount] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
-  const [fishGuess, setFishGuess] = useState("");
 
-  const totalCount = initialFishes.length;
   const isGameOver = Boolean(!answersLeft.length);
 
   const removeCurrentFish = () => {
-    answersLeft.length > 1
-      ? setAnswersLeft(answersLeft.slice(1))
-      : setAnswersLeft([]);
+    setAnswersLeft(answersLeft.slice(1));
   };
 
-  const gradeGuess = (isGuessCorrect) => {
-    isGuessCorrect
-      ? setCorrectCount(correctCount + 1)
-      : setIncorrectCount(incorrectCount + 1);
+  const testFishGuess = (guess) => {
+    const isGuessCorrect = answersLeft[0].name === guess;
+    if (isGuessCorrect) {
+      setCorrectCount(correctCount + 1);
+    } else {
+      setIncorrectCount(incorrectCount + 1);
+    }
     removeCurrentFish();
-  };
-
-  const testFishGuess = () => {
-    return fishGuess === answersLeft[0].name
-      ? gradeGuess(true)
-      : gradeGuess(false);
   };
 
   return (
@@ -59,8 +52,6 @@ export const AppProvider = ({ children }) => {
         totalCount,
         answersLeft,
         isGameOver,
-        fishGuess,
-        setFishGuess,
         testFishGuess,
       }}>
       {children}
@@ -76,8 +67,6 @@ export const useAppContext = () => {
     totalCount: context.totalCount,
     answersLeft: context.answersLeft,
     isGameOver: context.isGameOver,
-    fishGuess: context.fishGuess,
-    setFishGuess: context.setFishGuess,
     testFishGuess: context.testFishGuess,
   };
 };

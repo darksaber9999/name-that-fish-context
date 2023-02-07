@@ -1,12 +1,13 @@
 import "./styles/game-board.css";
-import React from "react";
+import React, { useState } from "react";
 import { useAppContext } from "../App.context";
 
 // ! Do not add props to gameboard
 export const GameBoard = () => {
-  const { answersLeft, fishGuess, setFishGuess, testFishGuess } =
-    useAppContext();
+  const { answersLeft, testFishGuess } = useAppContext();
   const nextFishToName = answersLeft[0];
+
+  const [fishGuess, setFishGuess] = useState("");
 
   const onChange = (e) => {
     const value = e.target.value.toLowerCase().trim();
@@ -15,7 +16,7 @@ export const GameBoard = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    testFishGuess();
+    testFishGuess(fishGuess);
     setFishGuess("");
   };
 
